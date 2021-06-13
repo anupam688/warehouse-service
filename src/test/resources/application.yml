@@ -1,0 +1,22 @@
+server:
+  port: 8080
+logging:
+  level:
+    web: debug
+    com.demo.warehouseservice: debug
+spring:
+  application:
+    name: warehouse-service
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:h2:mem:warehousedb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      idle-timeout: 10000
+      maximum-pool-size: 5

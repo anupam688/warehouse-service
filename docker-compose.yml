@@ -1,0 +1,35 @@
+version: "3.7"
+networks:
+  warehouse_network:
+services:
+  warehouse-db-postgres:
+    container_name: warehouse_db_postgres
+    image: postgres:13.1
+    restart: always
+    environment:
+      POSTGRES_DB: warehouse_postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+    ports:
+      - 5432:5432
+    networks:
+      - warehouse_network
+  warehouse-service:
+    depends_on:
+      - warehouse-db-postgres
+    container_name: warehouse_service
+    image: warehouse-service:0.0.1
+    build:
+      network: host
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - warehouse_network
+    links:
+      - warehouse-db-postgres
+    environment:
+      - spring.datasource.url=jdbc:postgresql://warehouse-db-postgres:5432/warehouse_postgres
+      - spring.datasource.username=postgres
+      - spring.datasource.password=password123
